@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./Die.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,6 +12,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Die = ({ face, rolling }) => {
+  const [currentface, setcurrentface] = useState(face);
+  useEffect(() => {
+    if (rolling) {
+      return;
+    }
+    const newface = Math.floor(Math.random() * 6) + 1;
+    setcurrentface(newface);
+  }, [rolling]);
   const faceIcons = [
     faDiceOne,
     faDiceTwo,
@@ -20,7 +28,7 @@ const Die = ({ face, rolling }) => {
     faDiceFive,
     faDiceSix,
   ];
-  if (face < 1 || face > 6) {
+  if (currentface < 1 || currentface > 6) {
     console.error(
       "Invalid face value for Die component. Must be between 1 and 6."
     );
@@ -29,7 +37,7 @@ const Die = ({ face, rolling }) => {
   return (
     <div>
       <FontAwesomeIcon
-        icon={rolling ? faDiceTwo : faceIcons[face - 1]}
+        icon={rolling ? faceIcons[currentface - 1] : faceIcons[currentface - 1]}
         className={`Die ${rolling && "Die-shaking"}`}
       />
     </div>
